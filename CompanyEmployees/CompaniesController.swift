@@ -8,15 +8,19 @@
 
 import UIKit
 
-class ViewController: UITableViewController {
-
+class CompaniesController: UITableViewController {
+    
+    let companies: [Company] = [
+        .init(name: "Apple", founded: Date()),
+        .init(name: "Google", founded: Date()),
+        .init(name: "Facebook", founded: Date())
+    ]
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .white
         
         navigationItem.title = "Companies"
-        navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "plus")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleAddCompany))
         
         tableView.backgroundColor = .darkBlue
@@ -26,9 +30,13 @@ class ViewController: UITableViewController {
         tableView.tableFooterView = UIView()
     }
     
-        
+    
     @objc func handleAddCompany() -> Void {
         print(#function)
+        let createCompanyController = CreateCompanyController()
+        let navControler = CustomNavigationController(rootViewController: createCompanyController)
+        navControler.modalPresentationStyle = .fullScreen
+        present(navControler, animated: true, completion: nil)
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -44,14 +52,17 @@ class ViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath)
         cell.backgroundColor = .tealColor
-        cell.textLabel?.text = "COMPANY NAME"
+        
+        let company = companies[indexPath.row]
+        
+        cell.textLabel?.text = company.name
         cell.textLabel?.textColor = .white
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         return cell
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 8
+        return companies.count
     }
     
 }

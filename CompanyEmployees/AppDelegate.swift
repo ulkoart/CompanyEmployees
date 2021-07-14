@@ -25,6 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().standardAppearance = appearance //landscape
         UINavigationBar.appearance().compactAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance //portrait
+        UINavigationBar.appearance().prefersLargeTitles = true
+        
         
         return true
     }
