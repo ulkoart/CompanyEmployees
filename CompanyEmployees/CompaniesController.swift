@@ -7,16 +7,49 @@
 //
 
 import UIKit
+import CoreData
 
-class CompaniesController: UITableViewController {
+class CompaniesController: UITableViewController, CreateCompanyControllerDelegatage {
     
-    let companies: [Company] = [
-        .init(name: "Apple", founded: Date()),
-        .init(name: "Google", founded: Date()),
-        .init(name: "Facebook", founded: Date())
-    ]
+    var companies = [Company]()
+//    var companies: [Company] = [
+//        .init(name: "Apple", founded: Date()),
+//        .init(name: "Google", founded: Date()),
+//        .init(name: "Facebook", founded: Date())
+//    ]
+    
+    func didAddCompany(company: Company) {
+        companies.append(company)
+        let newIndexPath = IndexPath(row: companies.count - 1, section: 0)
+        tableView.insertRows(at: [newIndexPath], with: .automatic)
+    }
+    
+    private func fetchCompanieis() {
+        let persistentContainer = NSPersistentContainer(name: "Companies")
+        persistentContainer.loadPersistentStores { (persistentStoreDescription, error) in
+            if let error = error {
+                fatalError("Loading of store failed: \(error)")
+            }
+        }
+        let context = persistentContainer.viewContext
+        
+        let fetchRequest = NSFetchRequest<Company>(entityName: "Company")
+        
+        do {
+            let companies = try context.fetch(fetchRequest)
+            companies.forEach { (comnapy) in
+                self.companies.append(comnapy)
+            }
+        } catch {
+            print("failed fetch companies")
+        }
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        fetchCompanieis()
         
         view.backgroundColor = .white
         
@@ -32,10 +65,11 @@ class CompaniesController: UITableViewController {
     
     
     @objc func handleAddCompany() -> Void {
-        print(#function)
         let createCompanyController = CreateCompanyController()
         let navControler = CustomNavigationController(rootViewController: createCompanyController)
         navControler.modalPresentationStyle = .fullScreen
+        
+        createCompanyController.delegate = self
         present(navControler, animated: true, completion: nil)
     }
     
