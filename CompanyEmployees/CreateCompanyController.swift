@@ -40,7 +40,7 @@ class CreateCompanyController: UIViewController {
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
         
-         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(handleSave))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(handleSave))
     }
     
     @objc private func handleCancel() {
@@ -50,28 +50,31 @@ class CreateCompanyController: UIViewController {
     @objc private func handleSave() {
         print(#function)
         
-        let persistentContainer = NSPersistentContainer(name: "Companies")
-        persistentContainer.loadPersistentStores { (persistentStoreDescription, error) in
-            if let error = error {
-                fatalError("Loading of store failed: \(error)")
-            }
-        }
-        let context = persistentContainer.viewContext
+//        let persistentContainer = NSPersistentContainer(name: "Companies")
+//        persistentContainer.loadPersistentStores { (persistentStoreDescription, error) in
+//            if let error = error {
+//                fatalError("Loading of store failed: \(error)")
+//            }
+//        }
+//        let context = persistentContainer.viewContext
+        
+        let context = CoreDataManager.shared.persistentContainer.viewContext
         let company = NSEntityDescription.insertNewObject(forEntityName: "Company", into: context)
         company.setValue(nameTextField.text, forKey: "name")
         do {
             try context.save()
+            dismiss(animated: true) {
+                self.delegate?.didAddCompany(company: company as! Company)
+            }
         } catch {
             fatalError("Save failed: \(error)")
         }
         
-            
-        
-//        dismiss(animated: true) { [weak self] in
-//            guard let name = self?.nameTextField.text else { return }
-//            let company = Company(name: name, founded: Date())
-//            self?.delegate?.didAddCompany(company: company)
-//        }
+        //        dismiss(animated: true) { [weak self] in
+        //            guard let name = self?.nameTextField.text else { return }
+        //            let company = Company(name: name, founded: Date())
+        //            self?.delegate?.didAddCompany(company: company)
+        //        }
     }
     
     private func setupUI() -> Void {

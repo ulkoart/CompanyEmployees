@@ -16,6 +16,7 @@
 		CE12E910269E25AA00DDE578 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE12E90F269E25AA00DDE578 /* Assets.xcassets */; };
 		CE12E913269E25AA00DDE578 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE12E911269E25AA00DDE578 /* LaunchScreen.storyboard */; };
 		CE12E91B269E2FAC00DDE578 /* UIColor+theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE12E91A269E2FAC00DDE578 /* UIColor+theme.swift */; };
+		CE7F684A26A5597100DD4B9A /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F684926A5597100DD4B9A /* CoreDataManager.swift */; };
 		CE80EDD026A3502D006F129A /* Companies.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE80EDCE26A3502D006F129A /* Companies.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
@@ -31,6 +32,7 @@
 		CE12E912269E25AA00DDE578 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CE12E914269E25AA00DDE578 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE12E91A269E2FAC00DDE578 /* UIColor+theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+theme.swift"; sourceTree = "<group>"; };
+		CE7F684926A5597100DD4B9A /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		CE80EDCF26A3502D006F129A /* Companies.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Companies.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -65,6 +67,9 @@
 			isa = PBXGroup;
 			children = (
 				CE12E906269E25A800DDE578 /* AppDelegate.swift */,
+				CE12E90A269E25A800DDE578 /* CompaniesController.swift */,
+				CE07EFDD269F7B9F0063F71D /* CreateCompanyController.swift */,
+				CE7F684926A5597100DD4B9A /* CoreDataManager.swift */,
 				CE12E908269E25A800DDE578 /* SceneDelegate.swift */,
 				CE12E90C269E25A800DDE578 /* Main.storyboard */,
 				CE12E90F269E25AA00DDE578 /* Assets.xcassets */,
@@ -72,8 +77,6 @@
 				CE12E914269E25AA00DDE578 /* Info.plist */,
 				CE12E91A269E2FAC00DDE578 /* UIColor+theme.swift */,
 				CE07EFDB269F78260063F71D /* Company.swift */,
-				CE12E90A269E25A800DDE578 /* CompaniesController.swift */,
-				CE07EFDD269F7B9F0063F71D /* CreateCompanyController.swift */,
 				CE80EDCE26A3502D006F129A /* Companies.xcdatamodeld */,
 			);
 			path = CompanyEmployees;
@@ -156,6 +159,7 @@
 				CE07EFDC269F78260063F71D /* Company.swift in Sources */,
 				CE80EDD026A3502D006F129A /* Companies.xcdatamodeld in Sources */,
 				CE12E909269E25A800DDE578 /* SceneDelegate.swift in Sources */,
+				CE7F684A26A5597100DD4B9A /* CoreDataManager.swift in Sources */,
 				CE07EFDE269F7B9F0063F71D /* CreateCompanyController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
