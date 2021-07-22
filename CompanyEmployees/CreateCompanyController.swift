@@ -47,17 +47,7 @@ class CreateCompanyController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    @objc private func handleSave() {
-        print(#function)
-        
-//        let persistentContainer = NSPersistentContainer(name: "Companies")
-//        persistentContainer.loadPersistentStores { (persistentStoreDescription, error) in
-//            if let error = error {
-//                fatalError("Loading of store failed: \(error)")
-//            }
-//        }
-//        let context = persistentContainer.viewContext
-        
+    @objc private func handleSave() {        
         let context = CoreDataManager.shared.persistentContainer.viewContext
         let company = NSEntityDescription.insertNewObject(forEntityName: "Company", into: context)
         company.setValue(nameTextField.text, forKey: "name")
@@ -69,12 +59,6 @@ class CreateCompanyController: UIViewController {
         } catch {
             fatalError("Save failed: \(error)")
         }
-        
-        //        dismiss(animated: true) { [weak self] in
-        //            guard let name = self?.nameTextField.text else { return }
-        //            let company = Company(name: name, founded: Date())
-        //            self?.delegate?.didAddCompany(company: company)
-        //        }
     }
     
     private func setupUI() -> Void {

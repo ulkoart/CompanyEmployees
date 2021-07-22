@@ -12,11 +12,6 @@ import CoreData
 class CompaniesController: UITableViewController, CreateCompanyControllerDelegatage {
     
     var companies = [Company]()
-//    var companies: [Company] = [
-//        .init(name: "Apple", founded: Date()),
-//        .init(name: "Google", founded: Date()),
-//        .init(name: "Facebook", founded: Date())
-//    ]
     
     func didAddCompany(company: Company) {
         companies.append(company)
@@ -24,15 +19,31 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
         tableView.insertRows(at: [newIndexPath], with: .automatic)
     }
     
-    private func fetchCompanieis() {
-//        let persistentContainer = NSPersistentContainer(name: "Companies")
-//        persistentContainer.loadPersistentStores { (persistentStoreDescription, error) in
-//            if let error = error {
-//                fatalError("Loading of store failed: \(error)")
-//            }
-//        }
-//        let context = persistentContainer.viewContext
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { (_, indexPath) in
+            let company = self.companies[indexPath.row]
+            print("delete - \(company.name ?? "")")
+            self.companies.remove(at: indexPath.row)
+            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+            let context = CoreDataManager.shared.persistentContainer.viewContext
+            context.delete(company)
+            do {
+                try context.save()
+            } catch {
+                print(error.localizedDescription)
+            }
+            
+        }
         
+        let editAction = UITableViewRowAction(style: .normal, title: "Edit") { (_, indexPath) in
+            let company = self.companies[indexPath.row]
+            print("edit - \(company.name ?? "")")
+        }
+        
+        return [deleteAction, editAction]
+    }
+    
+    private func fetchCompanieis() {
         let context = CoreDataManager.shared.persistentContainer.viewContext
         
         let fetchRequest = NSFetchRequest<Company>(entityName: "Company")
