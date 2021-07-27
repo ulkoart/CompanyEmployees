@@ -22,6 +22,5 @@ class CoreDataManager {
             }
         }
         return container
-    }()
-    
+    }()    
 }

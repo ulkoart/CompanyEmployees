@@ -32,15 +32,29 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
             } catch {
                 print(error.localizedDescription)
             }
-            
         }
         
-        let editAction = UITableViewRowAction(style: .normal, title: "Edit") { (_, indexPath) in
-            let company = self.companies[indexPath.row]
-            print("edit - \(company.name ?? "")")
-        }
-        
+        let editAction = UITableViewRowAction(style: .normal, title: "Edit", handler: editHandlerFunction(action:indexPath:))
+        editAction.backgroundColor = .lightRed
+        editAction.backgroundColor = .darkBlue
         return [deleteAction, editAction]
+    }
+    
+    func didEdidtCompany(company: Company) {
+        let row = companies.firstIndex(of: company)
+        let reloadIndexpath = IndexPath(row: row!, section: 0)
+        tableView.reloadRows(at: [reloadIndexpath], with: .middle)
+    }
+    
+    private func editHandlerFunction(action: UITableViewRowAction, indexPath:IndexPath) {
+        print(#function)
+        
+        let editCompanyControler = CreateCompanyController()
+        editCompanyControler.delegate = self
+        editCompanyControler.company = companies[indexPath.row]
+        let navController = CustomNavigationController(rootViewController: editCompanyControler)
+        navController.modalPresentationStyle = .fullScreen
+        present(navController, animated: true, completion: nil)
     }
     
     private func fetchCompanieis() {

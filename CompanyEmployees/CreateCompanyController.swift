@@ -11,9 +11,16 @@ import CoreData
 
 protocol CreateCompanyControllerDelegatage {
     func didAddCompany(company: Company)
+    func didEdidtCompany(company: Company)
 }
 
 class CreateCompanyController: UIViewController {
+    
+    var company: Company? {
+        didSet {
+            nameTextField.text = company?.name
+        }
+    }
     
     var delegate: CreateCompanyControllerDelegatage?
     // var companyController: CompaniesController?
@@ -32,10 +39,14 @@ class CreateCompanyController: UIViewController {
         return textField
     }()
     
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationItem.title = company == nil ? "Create Company" : "Edit Company"
+    }
+    
     override func viewDidLoad() {
         view.backgroundColor = .darkBlue
-        navigationItem.title = "Create Company"
-        
         setupUI()
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
@@ -48,6 +59,29 @@ class CreateCompanyController: UIViewController {
     }
     
     @objc private func handleSave() {        
+        if company == nil {
+            createCompany()
+        } else {
+            saveCompanyChanges()
+        }
+    }
+    
+    private func saveCompanyChanges() {
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+
+        company?.name = nameTextField.text
+        do {
+            try context.save()
+            dismiss(animated: true) { [unowned self] in
+                self.delegate?.didEdidtCompany(company: self.company!)
+            }
+        } catch {
+            fatalError("Save failed: \(error)")
+        }
+        
+    }
+    
+    private func createCompany() {
         let context = CoreDataManager.shared.persistentContainer.viewContext
         let company = NSEntityDescription.insertNewObject(forEntityName: "Company", into: context)
         company.setValue(nameTextField.text, forKey: "name")
