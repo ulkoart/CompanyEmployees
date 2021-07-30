@@ -40,6 +40,7 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
         return [deleteAction, editAction]
     }
     
+    
     func didEdidtCompany(company: Company) {
         let row = companies.firstIndex(of: company)
         let reloadIndexpath = IndexPath(row: row!, section: 0)
@@ -64,10 +65,6 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
         
         do {
             let companies = try context.fetch(fetchRequest)
-            companies.forEach { (comnapy) in
-                print(comnapy.name ?? "")
-            }
-            
             self.companies = companies
             self.tableView.reloadData()
             
@@ -82,8 +79,9 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
         
         fetchCompanieis()
         
-        view.backgroundColor = .white
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title:"Reset", style: .plain, target: self, action: #selector(handleReset))
         
+        view.backgroundColor = .white
         navigationItem.title = "Companies"
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "plus")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleAddCompany))
         
@@ -94,6 +92,41 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
         tableView.tableFooterView = UIView()
     }
     
+    @objc func handleReset() -> Void {
+        print(#function)
+        
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: Company.fetchRequest())
+        
+        do {
+            try context.execute(batchDeleteRequest)
+            
+            var indexPathsToRemove = [IndexPath]()
+            for (index, _) in companies.enumerated() {
+                let indexPath = IndexPath(row: index, section: 0)
+                indexPathsToRemove.append(indexPath)
+            }
+            companies.removeAll()
+            tableView.deleteRows(at: indexPathsToRemove, with: .left)
+
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let label = UILabel()
+        label.text = "No companies available..."
+        label.textColor = .white
+        label.textAlignment = .center
+        label.font = UIFont.boldSystemFont(ofSize: 16)
+        return label
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return companies.count == 0 ? 150 : 0
+    }
     
     @objc func handleAddCompany() -> Void {
         let createCompanyController = CreateCompanyController()
@@ -136,6 +169,13 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
         
         cell.textLabel?.textColor = .white
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        
+        if let imageData = company.imageData {
+            cell.imageView?.image = UIImage(data: imageData)
+        } else {
+            cell.imageView?.image = #imageLiteral(resourceName: "select_photo_empty")
+        }
+        
         return cell
     }
     
