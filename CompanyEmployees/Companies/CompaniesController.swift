@@ -88,7 +88,7 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
         tableView.backgroundColor = .darkBlue
         // tableView.separatorStyle = .none
         tableView.separatorColor = .white
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellId")
+        tableView.register(CompanyCell.self, forCellReuseIdentifier: "cellId")
         tableView.tableFooterView = UIView()
     }
     
@@ -149,8 +149,7 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath)
-        cell.backgroundColor = .tealColor
-        
+       
         let company = companies[indexPath.row]
         
         if let name = company.name, let founded = company.founded {
