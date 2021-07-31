@@ -148,34 +148,15 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath)
-       
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! CompanyCell
+        
         let company = companies[indexPath.row]
-        
-        if let name = company.name, let founded = company.founded {
-            // let local = Locale(identifier: "RU")
-            // let foundedWithLocal = founded.description(with: local)
-            
-            let dateFormater = DateFormatter()
-            dateFormater.dateFormat = "dd-MM-YYYY"
-            let foundedString = dateFormater.string(from: founded)
-            
-            let dateString = "\(name) - Founded: \(foundedString)"
-            cell.textLabel?.text = dateString
-        } else {
-            cell.textLabel?.text = company.name
-        }
-        
-        cell.textLabel?.textColor = .white
-        cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-        
-        if let imageData = company.imageData {
-            cell.imageView?.image = UIImage(data: imageData)
-        } else {
-            cell.imageView?.image = #imageLiteral(resourceName: "select_photo_empty")
-        }
-        
+        cell.company = company
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        60
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
