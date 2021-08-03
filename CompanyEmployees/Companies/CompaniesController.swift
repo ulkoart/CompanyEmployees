@@ -18,7 +18,7 @@ class CompaniesController: UITableViewController {
         
         self.companies = CoreDataManager.shared.fetchCompanies()
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title:"Reset", style: .plain, target: self, action: #selector(handleReset))
+        setupPlusButtonNavBar(selector: #selector(handleReset))
         
         view.backgroundColor = .white
         navigationItem.title = "Companies"

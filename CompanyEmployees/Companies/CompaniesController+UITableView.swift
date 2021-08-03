@@ -10,6 +10,15 @@ import UIKit
 
 extension CompaniesController {
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let company = companies[indexPath.row]
+        let employeesControler = EmployeesControler()
+        employeesControler.company = company
+        
+        navigationController?.pushViewController(employeesControler, animated: true)
+    }
+    
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { (_, indexPath) in
             let company = self.companies[indexPath.row]
