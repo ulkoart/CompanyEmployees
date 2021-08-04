@@ -181,7 +181,6 @@ class CreateCompanyController: UIViewController, UIImagePickerControllerDelegate
         nameLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16).isActive = true
         nameLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
         nameLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
         view.addSubview(nameTextField)
         nameTextField.topAnchor.constraint(equalTo: nameLabel.topAnchor).isActive = true
         nameTextField.leftAnchor.constraint(equalTo: nameLabel.rightAnchor).isActive = true
