@@ -28,15 +28,19 @@ class EmployeesControler: UITableViewController, CreateEmployeeControllerDelegat
     }
     
     private func fetchEmployees() {
-        let context = CoreDataManager.shared.persistentContainer.viewContext
-        let request = NSFetchRequest<Employee>(entityName: "Employee")
+//        let context = CoreDataManager.shared.persistentContainer.viewContext
+//        let request = NSFetchRequest<Employee>(entityName: "Employee")
+//
+//        do {
+//            let employees = try context.fetch(request)
+//            self.employees = employees
+//        } catch {
+//            print(error.localizedDescription)
+//        }
         
-        do {
-            let employees = try context.fetch(request)
-            self.employees = employees
-        } catch {
-            print(error.localizedDescription)
-        }
+        guard let companyEmployees = company?.employees?.allObjects as? [Employee] else {return}
+        
+        self.employees = companyEmployees
         
     }
     
@@ -80,6 +84,7 @@ class EmployeesControler: UITableViewController, CreateEmployeeControllerDelegat
     
     @objc func handleAdd() -> Void {
         let createEmployeeController = CreateEmployeeController()
+        createEmployeeController.company = company
         createEmployeeController.delegate = self
         let navControler = CustomNavigationController(rootViewController: createEmployeeController)
         navControler.modalPresentationStyle = .fullScreen
