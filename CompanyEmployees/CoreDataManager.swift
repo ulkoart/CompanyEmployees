@@ -43,7 +43,16 @@ class CoreDataManager {
         let context = persistentContainer.viewContext
         
         let employee = NSEntityDescription.insertNewObject(forEntityName: "Employee", into: context) as! Employee
+        
+        
         employee.setValue(employeeName, forKey: "name")
+        
+        let employeeInformation = NSEntityDescription.insertNewObject(forEntityName: "EmployeeInformation", into: context) as! EmployeeInformation
+        
+        employeeInformation.taxId = "456"
+        //employeeInformation.setValue("456", forKey: "taxId")
+        
+        employee.employeeInformation = employeeInformation
         
         do {
             try context.save()

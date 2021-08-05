@@ -154,6 +154,7 @@ class CreateCompanyController: UIViewController, UIImagePickerControllerDelegate
         
         if let companyImage = companyImageView.image {
             let imageData = companyImage.jpegData(compressionQuality: 0.8)
+            // let imageData = companyImage.pngData()
             company.setValue(imageData, forKey: "imageData")
         }
         
