@@ -18,17 +18,18 @@ class CompaniesController: UITableViewController {
         
         self.companies = CoreDataManager.shared.fetchCompanies()
         
-        setupPlusButtonNavBar(selector: #selector(handleReset))
+        setupPlusButtonNavBar(selector: #selector(handleAddCompany))
         
         view.backgroundColor = .white
         navigationItem.title = "Companies"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "plus")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleAddCompany))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(handleReset))
         
         tableView.backgroundColor = .darkBlue
         // tableView.separatorStyle = .none
         tableView.separatorColor = .white
         tableView.register(CompanyCell.self, forCellReuseIdentifier: "cellId")
         tableView.tableFooterView = UIView()
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0) // or .zero
     }
     
     @objc func handleReset() -> Void {
