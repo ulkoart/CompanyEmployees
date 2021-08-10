@@ -20,10 +20,13 @@ class IndentedLabel: UILabel {
 class EmployeesControler: UITableViewController, CreateEmployeeControllerDelegate {
     
     func didAddEmployee(employee: Employee) {
-        fetchEmployees()
-        tableView.reloadData()
+        
+        guard let section = employeeTypes.firstIndex(of: employee.type!) else { return }
+        let row = allEmployees[section].count        
+        let insertionIndexPath: IndexPath = IndexPath(row: row, section: section)
+        allEmployees[section].append(employee)
+        tableView.insertRows(at: [insertionIndexPath], with: .middle)
     }
-    
     
     var company: Company?
     
@@ -38,12 +41,8 @@ class EmployeesControler: UITableViewController, CreateEmployeeControllerDelegat
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let label = IndentedLabel()
-        if section == 0 {
-            label.text = "Short names"
-        } else {
-            label.text = "Long names"
-        }
-        
+       
+        label.text = employeeTypes[section]
         label.textColor = .darkBlue
         label.font = UIFont.boldSystemFont(ofSize: 16)
         label.backgroundColor = .lightBlue
@@ -55,33 +54,25 @@ class EmployeesControler: UITableViewController, CreateEmployeeControllerDelegat
         50
     }
     
-    var shortNameEmployees = [Employee]()
-    var longNameEmployees = [Employee]()
     var allEmployees = [[Employee]]()
+    var employeeTypes = [
+        EmployeeType.Executive.rawValue,
+        EmployeeType.SeniorManagment.rawValue,
+        EmployeeType.Staff.rawValue
+    ]
     
     private func fetchEmployees() {
         guard let companyEmployees = company?.employees?.allObjects as? [Employee] else {return}
         
-        shortNameEmployees = companyEmployees.filter { (employee) -> Bool in
-            if let count = employee.name?.count {
-                return count < 6
-            }
-            return false
+        allEmployees = []
+        employeeTypes.forEach { (employeeType) in
+            allEmployees.append(companyEmployees.filter { $0.type == employeeType })
         }
         
-        longNameEmployees = companyEmployees.filter({ (employee) -> Bool in
-            if let count = employee.name?.count {
-                return count > 6
-            }
-            return false
-        })
-        
-        allEmployees = [
-            shortNameEmployees,
-            longNameEmployees
-        ]
-        
-        // self.employees = companyEmployees
+        // let executives = companyEmployees.filter { $0.type == EmployeeType.Executive.rawValue }
+        // let seniorManagement = companyEmployees.filter { $0.type == EmployeeType.SeniorManagment.rawValue }
+        // let staff = companyEmployees.filter { $0.type == EmployeeType.Staff.rawValue }
+        // allEmployees = [executives, seniorManagement, staff]
         
     }
     
@@ -93,7 +84,7 @@ class EmployeesControler: UITableViewController, CreateEmployeeControllerDelegat
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
         
         let employee = allEmployees[indexPath.section][indexPath.row]
-
+        
         cell.textLabel?.text = employee.name
         
         if let birthday = employee.employeeInformation?.birthday {
@@ -101,10 +92,6 @@ class EmployeesControler: UITableViewController, CreateEmployeeControllerDelegat
             dateFormater.dateFormat = "dd-MM-YYYY"
             cell.textLabel?.text = "\(employee.name ?? "")    \(dateFormater.string(from: birthday))"
         }
-        
-        //        if let taxId = employee.employeeInformation?.taxId {
-        //            cell.textLabel?.text = "\(employee.name ?? "")    \(taxId)"
-        //        }
         
         cell.backgroundColor = UIColor.tealColor
         cell.textLabel?.textColor = .white
@@ -126,8 +113,6 @@ class EmployeesControler: UITableViewController, CreateEmployeeControllerDelegat
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
         
         setupPlusButtonNavBar(selector: #selector(handleAdd))
-        
-        
     }
     
     @objc func handleAdd() -> Void {
