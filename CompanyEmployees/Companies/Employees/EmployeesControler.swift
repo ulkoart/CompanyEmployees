@@ -20,13 +20,12 @@ class IndentedLabel: UILabel {
 class EmployeesControler: UITableViewController, CreateEmployeeControllerDelegate {
     
     func didAddEmployee(employee: Employee) {
-        employees.append(employee)
+        fetchEmployees()
         tableView.reloadData()
     }
     
     
     var company: Company?
-    var employees = [Employee]()
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -34,7 +33,7 @@ class EmployeesControler: UITableViewController, CreateEmployeeControllerDelegat
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return allEmployees.count
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -58,6 +57,7 @@ class EmployeesControler: UITableViewController, CreateEmployeeControllerDelegat
     
     var shortNameEmployees = [Employee]()
     var longNameEmployees = [Employee]()
+    var allEmployees = [[Employee]]()
     
     private func fetchEmployees() {
         guard let companyEmployees = company?.employees?.allObjects as? [Employee] else {return}
@@ -76,28 +76,24 @@ class EmployeesControler: UITableViewController, CreateEmployeeControllerDelegat
             return false
         })
         
+        allEmployees = [
+            shortNameEmployees,
+            longNameEmployees
+        ]
+        
         // self.employees = companyEmployees
         
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return shortNameEmployees.count
-        }
-        
-        return longNameEmployees.count
+        return allEmployees[section].count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
         
-        
-        
-       //  let employee = employees[indexPath.row]
-        let employee = indexPath.section == 0 ?
-            shortNameEmployees[indexPath.row] :
-            longNameEmployees[indexPath.row]
-        
+        let employee = allEmployees[indexPath.section][indexPath.row]
+
         cell.textLabel?.text = employee.name
         
         if let birthday = employee.employeeInformation?.birthday {
