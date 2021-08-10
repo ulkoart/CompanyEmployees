@@ -27,10 +27,50 @@ class CompaniesController: UITableViewController {
             
             do {
                 try backgroundContext.save()
+                
+                DispatchQueue.main.async {
+                    self.companies = CoreDataManager.shared.fetchCompanies()
+                    self.tableView.reloadData()
+                }
+                
             } catch {
                 print(error.localizedDescription)
             }
         }
+    }
+    
+    @objc private func doUpdates() {
+        print(#function)
+        CoreDataManager.shared.persistentContainer.performBackgroundTask { (backgroundContext) in
+            
+            let request: NSFetchRequest<Company> = Company.fetchRequest()
+            
+            do {
+                let companies = try backgroundContext.fetch(request)
+                
+                companies.forEach { (company) in
+                    print(company.name ?? "")
+                    company.name = "A: \(company.name ?? "")"
+                }
+                
+                do {
+                    try backgroundContext.save()
+                    
+                    DispatchQueue.main.async {
+                        CoreDataManager.shared.persistentContainer.viewContext.reset()
+                        self.companies = CoreDataManager.shared.fetchCompanies()
+                        self.tableView.reloadData()
+                    }
+                    
+                } catch {
+                    print(error.localizedDescription)
+                }
+                
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        
     }
     
     override func viewDidLoad() {
@@ -40,14 +80,14 @@ class CompaniesController: UITableViewController {
         
         setupPlusButtonNavBar(selector: #selector(handleAddCompany))
         
-
+        
         
         view.backgroundColor = .white
         navigationItem.title = "Companies"
- 
+        
         navigationItem.leftBarButtonItems = [
             UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(handleReset)),
-            UIBarButtonItem(title: "Do Work", style: .plain, target: self, action: #selector(doWork))
+            UIBarButtonItem(title: "Do Updates", style: .plain, target: self, action: #selector(doUpdates))
         ]
         
         tableView.backgroundColor = .darkBlue
@@ -72,13 +112,13 @@ class CompaniesController: UITableViewController {
             }
             companies.removeAll()
             tableView.deleteRows(at: indexPathsToRemove, with: .left)
-
+            
         } catch {
             print(error.localizedDescription)
         }
         
     }
-
+    
     @objc func handleAddCompany() -> Void {
         let createCompanyController = CreateCompanyController()
         let navControler = CustomNavigationController(rootViewController: createCompanyController)
