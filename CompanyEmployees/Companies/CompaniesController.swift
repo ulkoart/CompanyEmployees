@@ -13,6 +13,26 @@ class CompaniesController: UITableViewController {
     
     var companies = [Company]()
     
+    @objc private func doWork() {
+        print(#function)
+        
+        // MARK: - GCD
+        
+        CoreDataManager.shared.persistentContainer.performBackgroundTask { (backgroundContext) in
+            (0...10).forEach { (value) in
+                print(value)
+                let company = Company(context: backgroundContext)
+                company.name = String(value)
+            }
+            
+            do {
+                try backgroundContext.save()
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -20,9 +40,15 @@ class CompaniesController: UITableViewController {
         
         setupPlusButtonNavBar(selector: #selector(handleAddCompany))
         
+
+        
         view.backgroundColor = .white
         navigationItem.title = "Companies"
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(handleReset))
+ 
+        navigationItem.leftBarButtonItems = [
+            UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(handleReset)),
+            UIBarButtonItem(title: "Do Work", style: .plain, target: self, action: #selector(doWork))
+        ]
         
         tableView.backgroundColor = .darkBlue
         // tableView.separatorStyle = .none
