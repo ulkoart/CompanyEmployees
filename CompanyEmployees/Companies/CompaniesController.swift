@@ -73,21 +73,66 @@ class CompaniesController: UITableViewController {
         
     }
     
+    @objc private func doNestedUpdates() {
+        print(#function)
+        
+        DispatchQueue.global(qos: .background).async {
+            let privateContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+            
+            privateContext.parent = CoreDataManager.shared.persistentContainer.viewContext
+            
+            let request: NSFetchRequest<Company> = Company.fetchRequest()
+            request.fetchLimit = 1
+            
+            do {
+                let companies = try privateContext.fetch(request)
+                
+                companies.forEach { company in
+                    print(company.name ?? "")
+                    company.name = "D: \(company.name ?? "")"
+                }
+                
+                do {
+                    try privateContext.save()
+                    
+                    DispatchQueue.main.async {
+                        
+                        do {
+                            
+                            let context = CoreDataManager.shared.persistentContainer.viewContext
+                            
+                            if context.hasChanges {
+                                try context.save()
+                                self.tableView.reloadData()
+                            }
+                        
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                    }
+                    
+                } catch {
+                    print(error.localizedDescription)
+                }
+                
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.companies = CoreDataManager.shared.fetchCompanies()
-        
         setupPlusButtonNavBar(selector: #selector(handleAddCompany))
-        
-        
-        
+
         view.backgroundColor = .white
         navigationItem.title = "Companies"
         
         navigationItem.leftBarButtonItems = [
             UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(handleReset)),
-            UIBarButtonItem(title: "Do Updates", style: .plain, target: self, action: #selector(doUpdates))
+            UIBarButtonItem(title: "Nested Updates", style: .plain, target: self, action: #selector(doNestedUpdates))
         ]
         
         tableView.backgroundColor = .darkBlue
