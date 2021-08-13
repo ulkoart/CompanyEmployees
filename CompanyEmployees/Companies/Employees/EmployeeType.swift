@@ -10,6 +10,6 @@ import Foundation
 
 enum EmployeeType: String {
     case Executive
-    case SeniorManagment = "Senior managment"
+    case SeniorManagment = "Senior Management"
     case Staff
 }

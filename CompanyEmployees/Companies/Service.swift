@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreData
 
 struct Service {
     
@@ -31,10 +32,48 @@ struct Service {
             do {
                 let jsonCompanies = try jsonDecoder.decode([JSONCompany].self, from: data)
                 
+                let privateContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+                privateContext.parent = CoreDataManager.shared.persistentContainer.viewContext
+                
                 jsonCompanies.forEach { (jsonCompany) in
                     print(jsonCompany.name)
+                    
+                    let company = Company(context: privateContext)
+                    company.name = jsonCompany.name
+                    let dateFormater = DateFormatter()
+                    dateFormater.dateFormat = "MM/dd/yyyy"
+                    
+                    if let stringFounded = jsonCompany.founded {
+                        let foundedDate = dateFormater.date(from: stringFounded)
+                        company.founded = foundedDate
+                    }
+                    
+                    do {
+                        try privateContext.save()
+                        try privateContext.parent?.save()
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                    
                     jsonCompany.employees?.forEach({ (jsonEmployee) in
-                        print(jsonEmployee.name)
+                        let employee = Employee(context: privateContext)
+                        employee.name = jsonEmployee.name
+                        employee.type = jsonEmployee.type
+                        employee.company = company
+                        
+                        let employeeInformation = EmployeeInformation(context: privateContext)
+                        
+                        let birthdayDate = dateFormater.date(from: jsonEmployee.birthday)
+                        employeeInformation.birthday = birthdayDate
+                        employee.employeeInformation = employeeInformation
+ 
+                        
+                        do {
+                            try privateContext.save()
+                            try privateContext.parent?.save()
+                        } catch {
+                            print(error.localizedDescription)
+                        }
                     })
                 }
                 
