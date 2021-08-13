@@ -10,7 +10,7 @@
         <attribute name="founded" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="imageData" optional="YES" attributeType="Binary"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="numEmployees" attributeType="Integer 16" defaultValueString="100" usesScalarValueType="YES"/>
+        <attribute name="numEmployees" attributeType="String"/>
         <attribute name="officialName" attributeType="String" defaultValueString="NO OFFICIAL NAME"/>
         <relationship name="employees" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Employee" inverseName="company" inverseEntity="Employee"/>
     </entity>
@@ -28,8 +28,8 @@
     </entity>
     <elements>
         <element name="Address" positionX="34.671875" positionY="-133.61328125" width="128" height="103"/>
-        <element name="Company" positionX="-513.140625" positionY="-258.84375" width="128" height="119"/>
         <element name="Employee" positionX="-319.26171875" positionY="-19.78125" width="128" height="104"/>
         <element name="EmployeeInformation" positionX="43.95703125" positionY="61.2109375" width="128" height="88"/>
+        <element name="Company" positionX="-135" positionY="-45" width="128" height="119"/>
     </elements>
 </model>

@@ -29,7 +29,7 @@ class CompanyCell: UITableViewCell {
                 let dateString = "\(name) - Founded: \(foundedString)"
                 nameFoundedLabel.text = dateString
             } else {
-                nameFoundedLabel.text = company?.name
+                nameFoundedLabel.text = "\(company?.name ?? "") \(company?.numEmployees ?? "")"
             }
                     
         }
