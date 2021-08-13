@@ -98,9 +98,9 @@ class CompaniesAutoUpdateController: UITableViewController, NSFetchedResultsCont
         tableView.backgroundColor = .darkBlue
         tableView.register(CompanyCell.self, forCellReuseIdentifier: cellId)
         
-//        fetchedResultsController.fetchedObjects?.forEach({ (company) in
-//            print(company.name ?? "")
-//        })
+        fetchedResultsController.fetchedObjects?.forEach({ (company) in
+            print(company.officialName)
+        })
         
         // Service.shared.downloadCompaniesFromServer()
         

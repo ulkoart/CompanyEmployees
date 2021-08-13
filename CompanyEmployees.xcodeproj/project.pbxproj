@@ -44,6 +44,7 @@
 		CE18A6CE26C267380057FB9E /* EmployeeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmployeeType.swift; sourceTree = "<group>"; };
 		CE1E649826B482B300F7AD9F /* CompanyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyCell.swift; sourceTree = "<group>"; };
 		CE2CFB1026C52613002448CD /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
+		CE2CFB1226C69D39002448CD /* Companies v1.1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Companies v1.1.xcdatamodel"; sourceTree = "<group>"; };
 		CE67B79F26B7CEFC00D4BA00 /* CompaniesController+CreateCompany.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CompaniesController+CreateCompany.swift"; sourceTree = "<group>"; };
 		CE67B7A226B7D16500D4BA00 /* CompaniesController+UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CompaniesController+UITableView.swift"; sourceTree = "<group>"; };
 		CE7F684926A5597100DD4B9A /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
@@ -427,9 +428,10 @@
 		CE80EDCE26A3502D006F129A /* Companies.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				CE2CFB1226C69D39002448CD /* Companies v1.1.xcdatamodel */,
 				CE80EDCF26A3502D006F129A /* Companies.xcdatamodel */,
 			);
-			currentVersion = CE80EDCF26A3502D006F129A /* Companies.xcdatamodel */;
+			currentVersion = CE2CFB1226C69D39002448CD /* Companies v1.1.xcdatamodel */;
 			path = Companies.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

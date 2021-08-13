@@ -85,12 +85,12 @@ class EmployeesControler: UITableViewController, CreateEmployeeControllerDelegat
         
         let employee = allEmployees[indexPath.section][indexPath.row]
         
-        cell.textLabel?.text = employee.name
+        cell.textLabel?.text = employee.fullName
         
         if let birthday = employee.employeeInformation?.birthday {
             let dateFormater = DateFormatter()
             dateFormater.dateFormat = "dd-MM-YYYY"
-            cell.textLabel?.text = "\(employee.name ?? "")    \(dateFormater.string(from: birthday))"
+            cell.textLabel?.text = "\(employee.fullName ?? "")    \(dateFormater.string(from: birthday))"
         }
         
         cell.backgroundColor = UIColor.tealColor
